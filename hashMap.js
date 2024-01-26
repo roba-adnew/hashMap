@@ -180,15 +180,22 @@ function linkedList() {
         return;
     }
 
-    return { append, prepend, size, getHead, getTail, at, pop, contains, findIndex, findValue, toString, removeAt }
+    function clear() {
+        head = tail = node(null, null);
+        return;
+    }
+
+    return { append, prepend, size, getHead, getTail, at, pop, contains, findIndex, findValue, toString, removeAt, clear }
 }
 
 function hashMap() {
 
     const capacity = 100;
     const loadFactor = 0.8;
+    let num_keys = 0;
 
     const buckets = Array(capacity);
+
     function hash(key) {
         let hashCode = 0;
 
@@ -202,6 +209,7 @@ function hashMap() {
     }
 
     function set(key, value) {
+        num_keys++;
         const newNode = node(key, value)
         const hashedKey = hash(key);
 
@@ -209,7 +217,8 @@ function hashMap() {
             buckets[hashedKey] = linkedList();
         }
 
-        buckets[hashedKey].append(newNode)
+        buckets[hashedKey].append(newNode);
+        return;
 
         // Add in lines possible checking for load factor and/or increasing the 
         // size of the hashMap
@@ -235,6 +244,7 @@ function hashMap() {
             const hashedKey = hash(key);
             const index = buckets[hashedKey].findIndex(key);
             buckets[hashedKey].removeAt(index);
+            num_keys++;
             return true;
         }
         else {
@@ -242,6 +252,20 @@ function hashMap() {
         }
     }
 
+    function length() {
+        return num_keys;
+    }
 
-    return { set, get, has, remove, buckets}
+    function clear() {
+        for (let i = 0; i < capacity; i++) {
+            if (buckets[i]) {
+                buckets[i].clear();
+            }
+        }
+        
+        num_keys = 0;
+        return;
+    }
+
+    return { set, get, has, remove, length, clear}
 }
