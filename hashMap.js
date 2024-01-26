@@ -182,6 +182,7 @@ function linkedList() {
 
     function clear() {
         head = tail = node(null, null);
+        length = 0;
         return;
     }
 
@@ -262,10 +263,63 @@ function hashMap() {
                 buckets[i].clear();
             }
         }
-        
+
         num_keys = 0;
         return;
     }
 
-    return { set, get, has, remove, length, clear}
+    function keys() {
+        const keys = [];
+
+        for (let i = 0; i < capacity; i++) {
+            if (buckets[i]) {
+                let searchNode = buckets[i].getHead();;
+                do {
+                    keys.push(searchNode.key);
+                    searchNode = searchNode.next;
+                }
+                while (searchNode && searchNode.key !== null)
+            }
+        }
+
+        return keys;
+    }
+
+    function values() {
+        const values = [];
+
+        for (let i = 0; i < capacity; i++) {
+            if (buckets[i]) {
+                let searchNode = buckets[i].getHead();;
+                do {
+                    values.push(searchNode.value);
+                    searchNode = searchNode.next;
+                }
+                while (searchNode && searchNode.key !== null)
+            }
+        }
+
+        return values;
+    }
+
+    function entries() {
+        const entries = [];
+
+        for (let i = 0; i < capacity; i++) {
+            if (buckets[i]) {
+                let searchNode = buckets[i].getHead();;
+                do {
+                    const entry = [searchNode.key, searchNode.value]
+                    entries.push(entry);
+                    searchNode = searchNode.next;
+                }
+                while (searchNode && searchNode.key !== null)
+            }
+        }
+
+        return entries;
+    }
+
+
+    return { set, get, has, remove, length, clear, keys, values, entries }
 }
