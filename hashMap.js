@@ -1,6 +1,3 @@
-// if (index < 0 || index >= buckets.length) {
-//     throw new Error("Trying to access index out of bound");
-//   }
 function node(key, value, next = null) {
     return {key, value, next}
 }
@@ -192,7 +189,6 @@ function linkedList() {
 function hashMap() {
 
     const capacity = 100;
-    const loadFactor = 0.8;
     let num_keys = 0;
 
     const buckets = Array(capacity);
@@ -214,19 +210,25 @@ function hashMap() {
         const newNode = node(key, value)
         const hashedKey = hash(key);
 
+        if (hashedKey < 0 || hashedKey >= capacity) {
+            throw new Error("Trying to access index out of bound");
+        }
+
         if (!buckets[hashedKey]) {
             buckets[hashedKey] = linkedList();
         }
 
         buckets[hashedKey].append(newNode);
         return;
-
-        // Add in lines possible checking for load factor and/or increasing the 
-        // size of the hashMap
     }
 
     function get(key) {
         const hashedKey = hash(key);
+
+        if (hashedKey < 0 || hashedKey >= capacity) {
+            throw new Error("Trying to access index out of bound");
+        }
+
         if (buckets[hashedKey]) {
             return buckets[hashedKey].findValue(key);
         }
@@ -236,6 +238,11 @@ function hashMap() {
 
     function has(key) {
         const hashedKey = hash(key);
+
+        if (hashedKey < 0 || hashedKey >= capacity) {
+            throw new Error("Trying to access index out of bound");
+        }
+
         const keyExists = buckets[hashedKey].contains(key);
         return keyExists;
     }
